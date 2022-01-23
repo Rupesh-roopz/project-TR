@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import Divider from '@mui/material/Divider';
+import DivcolumnIder from '@mui/material/Divider';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ViewColumnOutlinedIcon from '@mui/icons-material/ViewColumnOutlined';
@@ -26,87 +27,95 @@ import MenuDropdown from './dropDown-menu';
 import { mockData } from '../mock-data/mockTableData';
 import handleState from '../utils/handle-input';
 import { table } from 'console';
+import { isModuleNamespaceObject } from 'util/types';
+import { elementAcceptingRef } from '@mui/utils';
+import { rootShouldForwardProp } from '@mui/material/styles/styled';
+import { resolveObjectURL } from 'buffer';
+import { consumers } from 'stream';
 
-const tableHeader = [
+type selectedColumnProps = ({ columnId: string; name: string; } | undefined)[]
+
+type mockDataProps = {
+	id: number,
+	sig: string,
+	empty: string,
+	reference: string,
+	account: string,
+	created: string,
+	modified: string,
+	quotes: number, 	
+	pricingTier: string,
+}[];
+// const mockDataProps:ObjectType = data;
+// const temp = mockDataProps[account as keyof typeof mockDataProps];
+
+const defaultTableHeader= [
 	{
-		id : 'sig',
+		columnId : 'sig',
 		name :  'Sig...'
 	},
 	{
-		id : 'emptyname',
+		columnId : 'emptyname',
 		name : ' '
 	},
 	{
-		id : 'reference',
+		columnId : 'reference',
 		name : 'Reference'
-	},
-	{
-		id : 'account',
-		name : 'Account'
-	},
-	{
-		id : 'created',
-		name : 'Created'
-	},
-	{
-		id : 'modified',
-		name : 'Modified'
-	},
-	{
-		id : 'quotes',
-		name : 'Quotes'
-	},
-	{
-		id : 'pricingTags',
-		name : 'Pricing Tags'
 	}
 ];
 
-const tablecols = ['Sig...', ' ', 'Reference'];
+// const sampleFunction = (columnId : any) => {
+// 	return mockData.map((row) => {
+// 		return row['account'];
+// 	});
+// };
 
 export default function MainTable() {
 
 	const advancedColumns = {
-		isAccount : false,
-		isCreated : false,
-		isModified : false,
-		isQuotes : false,
-		isPricingTier : false
+		account : false,
+		created : false,
+		modified : false,
+		quotes : false,
+		pricingTier : false
 		
 	};
 
-	const { values, handleInputChange } = handleState(advancedColumns);
-
-	// const sampleFunc = () => {
-	// 	console.log(values.isAccount);
-	// 	if(values.isAccount) {
-	// 		tablecols.push('account');
-	// 	} else {
-	// 		const index = tablecols.indexOf('account');
-	// 		console.log(tablecols);
-	// 		console.log(index);
-	// 		if (index > -1) {
-	// 			tablecols.splice(index, 2);
-	// 		}
-	// 	}
-	// 	console.log(tablecols);
-				
-	// };
-	// sampleFunc();
 	
+
+	const { values, handleInputChange } = handleState(advancedColumns);
+	
+
+	const additionalColumns = (values : any) => {
+		const columnNames = ['Account', 'Created', 'Modified', 'Quotes', 'Pricing Tier'];
+		const val = Object.values(values);
+		const keys = Object.keys(values);
+		const temp = val.map((elements, index) => {
+			if(elements)
+				return {columnId : keys[index], name : columnNames[index]};
+		});
+		
+		return temp.filter((elements)=> {return elements; });
+	};
+	const selectedColums: selectedColumnProps = additionalColumns(values);
+	// if(selectedColums.length) {console.log(defaultTableHeader.concat(selectedColums));}
+	
+
+	console.log(selectedColums);
+	// additionalColumnData(selectedColums,mockData);
 	return (
-		<TableContainer component={Paper} sx={{ width : '100%' }} >
-			<Table  size="small" aria-label="a dense table" >
+		<TableContainer component={Paper} sx={{ wcolumnIdth : '100%', height : '300px' }} >
+			<Table  size="small" aria-label="a dense table" stickyHeader >
 				<TableHead >
 					<TableRow
 						hover
 					>
 						{
-							tableHeader.map((column : {
-								id :string,
+							defaultTableHeader.map((column : {
+								columnId :string,
 								name : string
 							}) => (
-								<TableCell key={column.id} variant="head">
+								<TableCell key={column.columnId} variant="head">
 									<Grid
 										container
 										direction="row"
@@ -120,8 +129,36 @@ export default function MainTable() {
 										</Grid>
 										<Grid item 
 											sx={{
-												// borderRight:'1px solid black',
-												// borderLeft:'1px solid black'
+												// borderRight:'1px solcolumnId black',
+												// borderLeft:'1px solcolumnId black'
+											}}>
+											<MenuDropdown 
+												values={values}
+												handleInputChange={handleInputChange}
+											/>
+										</Grid>
+									</Grid>
+								</TableCell>
+							))
+						}
+						{
+							selectedColums.map((column : any) => (
+								<TableCell key={column.columnId} variant="head">
+									<Grid
+										container
+										direction="row"
+										justifyContent="space-between"
+										alignItems="center"
+									>
+										<Grid item>
+											<Typography>
+												{column.name}
+											</Typography>
+										</Grid>
+										<Grid item 
+											sx={{
+												// borderRight:'1px solcolumnId black',
+												// borderLeft:'1px solcolumnId black'
 											}}>
 											<MenuDropdown 
 												values={values}
@@ -135,7 +172,7 @@ export default function MainTable() {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{mockData.map((row) => (
+					{mockData.map((row: any) => (
 						<TableRow	
 							key={row.id}
 							sx={{ '&:last-child td, &:last-child th' : { border : 0 } }}
@@ -144,11 +181,19 @@ export default function MainTable() {
 							<TableCell ><Typography>{row.sig}</Typography></TableCell>
 							<TableCell ><Typography>{row.empty}</Typography></TableCell>
 							<TableCell ><Typography>{row.reference}</Typography></TableCell> 
-							<TableCell ><Typography>{row.account}</Typography></TableCell> 
-							<TableCell ><Typography>{row.created}</Typography></TableCell> 
-							<TableCell ><Typography>{row.modified}</Typography></TableCell> 
-							<TableCell ><Typography>{row.quotes}</Typography></TableCell> 
-							<TableCell ><Typography>{row.pricingTier}</Typography></TableCell>             
+							{
+								selectedColums.map((col: any) => (
+									// d = columnId;
+									// console.log(name)
+									<TableCell key={col.columnId}>
+										<Typography>
+											{
+												row[col.columnId as keyof mockDataProps]
+											}
+										</Typography>
+									</TableCell>
+								))
+							} 
 						</TableRow>
 					))}
 				</TableBody>

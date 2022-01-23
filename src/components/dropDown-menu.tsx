@@ -12,7 +12,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ViewColumnOutlinedIcon from '@mui/icons-material/ViewColumnOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button, ClickAwayListener, Grid, Grow, MenuList, Popper, Typography } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
@@ -25,160 +25,241 @@ import ButtonBase from '@mui/material/ButtonBase';
 const columns = [];
 
 const MenuDropdown = (props: any) => {
-
 	const {values, handleInputChange} = props;
-	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [open, setOpen] = React.useState(false);
+	const [openInner, setOpenInner] = React.useState(false);
+	const anchorRef = React.useRef<HTMLButtonElement>(null);
+	const anchorRefInner = React.useRef<HTMLButtonElement>(null);
 
-	const open = Boolean(anchorEl);
-	const handleClick = (event :  React.MouseEvent<HTMLButtonElement>) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
+	const handleToggle = () => {
+		setOpen((prevOpen) => !prevOpen);
 	};
 
-	const [anchorColumn, setAnchorColumn] = React.useState<null | HTMLElement>(null);
-	const openAnchorColumn = Boolean(anchorColumn);
-	const handleClickAnchorColumn = (event :  React.MouseEvent<HTMLButtonElement>) => {
-		setAnchorColumn(event.currentTarget);
+	const handleToggleInner = () => {
+		setOpenInner((prevOpen) => !prevOpen);
 	};
-	const handleCloseAnchorColumn = () => {
-		setAnchorColumn(null);
+  
+	const handleClose = (event: Event | React.SyntheticEvent) => {
+		if (
+			anchorRef.current &&
+		anchorRef.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+  
+		setOpen(false);
 	};
+
+	const handleCloseInner = (event: Event | React.SyntheticEvent) => {
+		if (
+			anchorRefInner.current &&
+			anchorRefInner.current.contains(event.target as HTMLElement)
+		) {
+			return;
+		}
+  
+		setOpenInner(false);
+	};
+  
+	function handleListKeyDown(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpen(false);
+		} else if (event.key === 'Escape') {
+			setOpen(false);
+		}
+	}
+
+	function handleListKeyDownInner(event: React.KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			setOpenInner(false);
+		} else if (event.key === 'Escape') {
+			setOpenInner(false);
+		}
+	}
+  
+	// return focus to the button when we transitioned from !open -> open
+	// const prevOpen = React.useRef(open);
+	// React.useEffect(() => {
+	// 	if (prevOpen.current === true && open === false) {
+	// 	anchorRef.current!.focus();
+	// 	}
+  
+	// 	prevOpen.current = open;
+	// }, [open]);
 	return (
 		<>
 			<IconButton
-				id="basic-button"
-				aria-controls={open ? 'basic-menu' : undefined}
-				aria-haspopup="true"
+				ref={anchorRef}
+				id="composition-button"
+				aria-controls={open ? 'composition-menu' : undefined}
 				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}
+				aria-haspopup="true"
+				onClick={handleToggle}
 			>
 				<KeyboardArrowDownIcon />
 			</IconButton>
-			<Menu
-				id="basic-menu"
-				anchorEl={anchorEl}
+			<Popper
 				open={open}
-				onClose={handleClose}
-				MenuListProps={{
-					'aria-labelledby' : 'basic-button',
-				}}
+				anchorEl={anchorRef.current}
+				role={undefined}
+				placement="bottom-start"
+				transition
+				disablePortal
 			>
-				<MenuItem>
-					<Typography sx={{ fontSize : 20 }}>
-						<ArrowUpwardIcon />
-                              Sort Descending
-					</Typography>
-				</MenuItem>
-				<MenuItem divider autoFocus>
-					<Typography sx={{ fontSize : 20 }}>
-						<ArrowDownwardIcon />
-                              Sort Descending
-					</Typography>
-
-				</MenuItem>
-                
-				<MenuItem divider>
-					<ButtonBase
-						id="basic-button"
-						aria-controls={openAnchorColumn ? 'basic-menu' : undefined}
-						aria-haspopup="true"
-						aria-expanded={openAnchorColumn ? 'true' : undefined}
-						onClick={handleClickAnchorColumn}
-						// sx={{backgroundColor: 'pink'}}
-					>
-						<Typography sx={{ fontSize : 20 }}>
-							<ViewColumnOutlinedIcon />
-                                    Columns
-							<KeyboardArrowRightOutlinedIcon />
-						</Typography>
-                            
-					</ButtonBase>
-					<Menu
-						id="basic-menu"
-						anchorEl={anchorColumn}
-						open={openAnchorColumn}
-						onClose={handleCloseAnchorColumn}
-						MenuListProps={{
-							'aria-labelledby' : 'basic-button',
-						}}
-						anchorOrigin={{
-							vertical : 'top',
-							horizontal : 'right',
-						}}
-						transformOrigin={{
-							vertical : 'top',
-							horizontal : 'left',
+				{({ TransitionProps, placement }) => (
+					<Grow
+						{...TransitionProps}
+						style={{
+							transformOrigin:
+                  placement === 'bottom-start' ? 'left top' : 'left bottom',
 						}}
 					>
-						<MenuItem>
-							<FormGroup>
-								<FormControlLabel 
-									control={
-										<Checkbox 
-											checked = {values.isAccount}
-											onChange={(e : any) => handleInputChange({ target : { id : 'isAccount', value : e.target.checked } })}
-										/>}
-									label={																																															
+						<Paper sx={{width : '200px'}}>
+							<ClickAwayListener onClickAway={handleClose}>
+								<MenuList
+									autoFocusItem={open}
+									id="composition-menu"
+									aria-labelledby="composition-button"
+									onKeyDown={handleListKeyDown}
+								>
+									<MenuItem sx={{padding : '0px	'}}>
+										<Typography sx={{ fontSize : 20, width:'100%' }}>
+											<ArrowUpwardIcon />
+											Sort Descending
+										</Typography>
+									</MenuItem>
+									<MenuItem divider autoFocus sx={{padding : '0px	'}}>
 										<Typography sx={{ fontSize : 20 }}>
-											Account
-										</Typography>}
-								/>  
-								<FormControlLabel 
-									control={
-										<Checkbox 
-											checked = {values.isCreated}
-											onChange={(e : any) => handleInputChange({ target : { id : 'isCreated', value : e.target.checked } })}
-										/>}
-									label={
-										<Typography sx={{ fontSize : 20 }}>
-											Created
-										</Typography>}
-								/>  
-								<FormControlLabel 
-									control={
-										<Checkbox 
-											checked = {values.isModified}
-											onChange={(e : any) => handleInputChange({ target : { id : 'isModified', value : e.target.checked } })}
-										/>}
-									label={
-										<Typography sx={{ fontSize : 20 }}>
-											Modified
-										</Typography>}
-								/>  
-								<FormControlLabel 
-									control={
-										<Checkbox 
-											checked = {values.isQuotes}
-											onChange={(e : any) => handleInputChange({ target : { id : 'isQuotes', value : e.target.checked } })}
-										/>}
-									label={
-										<Typography sx={{ fontSize : 20 }}>
-											Quotes
-										</Typography>}
-								/>  
-								<FormControlLabel 
-									control={
-										<Checkbox 
-											checked = {values.isPricingTier}
-											onChange={(e : any) => handleInputChange({ target : { id : 'isPricingTier', value : e.target.checked } })}
-										/>}
-									label={
-										<Typography sx={{ fontSize : 20 }}>
-											Pricing Tags
-										</Typography>}
-								/>  
-							</FormGroup>
-						</MenuItem>
-					</Menu>
-				</MenuItem>
-				<MenuItem>  
-					<FormGroup>
-						<FormControlLabel control={<Checkbox />} label={<Typography sx={{ fontSize : 20 }}>Filter</Typography>} />  
-					</FormGroup>
-				</MenuItem>
-			</Menu>
+											<ArrowDownwardIcon />
+											Sort Descending
+										</Typography>
+									</MenuItem>
+									<MenuItem divider autoFocus sx={{padding : '0px	'}}>
+										<Typography 
+											ref={anchorRefInner}
+											id="compositionI-button"
+											aria-controls={openInner ? 'composition-menu' : undefined}
+											aria-expanded={openInner ? 'true' : undefined}
+											aria-haspopup="true"
+											onClick={handleToggleInner}
+											sx={{ fontSize : 20, width:'100%' }}>
+											<ViewColumnOutlinedIcon />
+												Columns
+											<KeyboardArrowRightOutlinedIcon />
+										</Typography>
+										<Popper
+											open={openInner}
+											anchorEl={anchorRefInner.current}
+											// role={undefined}
+											placement="right-start"
+											transition
+											disablePortal
+										>
+											{({ TransitionProps, placement }) => (
+												<Grow
+													{...TransitionProps}
+													style={{
+														transformOrigin:
+														placement === 'right-start' ? 'left top' : 'right bottom',
+													}}
+												>
+													<Paper component='div'>
+														<ClickAwayListener onClickAway={handleCloseInner}>
+															<MenuList
+																autoFocusItem={openInner}
+																id="composition-menu"
+																aria-labelledby="composition-button"
+																onKeyDown={handleListKeyDownInner}
+															>
+																<MenuItem>
+																
+																	<FormGroup>
+																		<div>
+																			<FormControlLabel 
+																				control={
+																					<Checkbox 
+																						sx={{padding : '0px'}}
+																						checked = {values.account}
+																						onChange={(e : any) => handleInputChange({ target : { id : 'account', value : e.target.checked } })}
+																					/>}
+																				label={																																															
+																					<Typography>
+																				Account
+																					</Typography>}
+																			/>  
+																		</div>
+																		
+																		<FormControlLabel 
+																			control={
+																				<Checkbox 
+																					sx={{padding : '0px'}}
+																					checked = {values.created}
+																					onChange={(e : any) => handleInputChange({ target : { id : 'created', value : e.target.checked } })}
+																				/>}
+																			label={
+																				<Typography>
+																				Created
+																				</Typography>}
+																		/>  
+																		<FormControlLabel 
+																			control={
+																				<Checkbox 
+																					sx={{padding : '0px'}}
+																					checked = {values.modified}
+																					onChange={(e : any) => handleInputChange({ target : { id : 'modified', value : e.target.checked } })}
+																				/>}
+																			label={
+																				<Typography>
+																				Modified
+																				</Typography>}
+																		/>  
+																		<FormControlLabel 
+																			control={
+																				<Checkbox 
+																					sx={{padding : '0px'}}
+																					checked = {values.quotes}
+																					onChange={(e : any) => handleInputChange({ target : { id : 'quotes', value : e.target.checked } })}
+																				/>}
+																			label={
+																				<Typography>
+																				Quotes
+																				</Typography>}
+																		/>  
+																		<FormControlLabel 
+																			control={
+																				<Checkbox 
+																					sx={{padding : '0px'}}
+																					checked = {values.pricingTier}
+																					onChange={(e : any) => handleInputChange({ target : { id : 'pricingTier', value : e.target.checked } })}
+																				/>}
+																			label={
+																				<Typography>
+																				Pricing Tags
+																				</Typography>}
+																		/>
+																	</FormGroup>
+																</MenuItem>
+															</MenuList>
+														</ClickAwayListener>
+													</Paper>
+												</Grow>
+											)}
+										</Popper>
+									</MenuItem>
+									<MenuItem sx={{paddingLeft : '10px'}}>  
+										<FormGroup>
+											<FormControlLabel control={<Checkbox sx={{padding : '0px'}}/>} label={<Typography sx={{ fontSize : 20 }}>Filter</Typography>} />  
+										</FormGroup>
+									</MenuItem>
+								</MenuList>
+							</ClickAwayListener>
+						</Paper>
+					</Grow>
+				)}
+			</Popper>
+			
 		</>
 	);
 };
