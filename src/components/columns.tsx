@@ -1,34 +1,34 @@
 export const Columns = [
 	{
-		header : 'Sig',
+		Header : 'Sig',
 		accessor : 'sig'
 	},
 	{
-		header : ' ',
+		Header : ' ',
 		accessor : 'empty'
 	},
 	{
-		header : 'Reference',
-		accessor : 'empty'
+		Header : 'Reference',
+		accessor : 'reference'
 	},
 	{
-		header : 'Account',
+		Header : 'Account',
 		accessor: 'account'
 	},
 	{
-		header : 'Created',
+		Header : 'Created',
 		accessor: 'created'
 	},
 	{
-		header : 'Modified',
+		Header : 'Modified',
 		accessor: 'modified'
 	},
 	{
-		header : 'Quotes',
+		Header : 'Quotes',
 		accessor: 'quotes'
 	},
 	{
-		header : 'Pricing Tier',
+		Header : 'Pricing Tier',
 		accessor: 'pricingTier'
-	},
+	}
 ];

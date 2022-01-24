@@ -22,17 +22,20 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 
-const columns = [];
+// const columns = [];
 
 const MenuDropdown = (props: any) => {
-	const {values, handleInputChange} = props;
+	const {allColumns, columnName, handleMenuClick} = props;
+
+	// console.log(columnName);
 	const [open, setOpen] = React.useState(false);
 	const [openInner, setOpenInner] = React.useState(false);
 	const anchorRef = React.useRef<HTMLButtonElement>(null);
 	const anchorRefInner = React.useRef<HTMLButtonElement>(null);
 
-	const handleToggle = () => {
+	const handleToggle = (columnName : string) => {
 		setOpen((prevOpen) => !prevOpen);
+		handleMenuClick(columnName);
 	};
 
 	const handleToggleInner = () => {
@@ -96,7 +99,7 @@ const MenuDropdown = (props: any) => {
 				aria-controls={open ? 'composition-menu' : undefined}
 				aria-expanded={open ? 'true' : undefined}
 				aria-haspopup="true"
-				onClick={handleToggle}
+				onClick={()=>handleToggle(columnName)}
 			>
 				<KeyboardArrowDownIcon />
 			</IconButton>
@@ -165,7 +168,7 @@ const MenuDropdown = (props: any) => {
 														placement === 'right-start' ? 'left top' : 'right bottom',
 													}}
 												>
-													<Paper component='div'>
+													<Paper>
 														<ClickAwayListener onClickAway={handleCloseInner}>
 															<MenuList
 																autoFocusItem={openInner}
@@ -174,72 +177,18 @@ const MenuDropdown = (props: any) => {
 																onKeyDown={handleListKeyDownInner}
 															>
 																<MenuItem>
-																
-																	<FormGroup>
-																		<div>
-																			<FormControlLabel 
-																				control={
-																					<Checkbox 
-																						sx={{padding : '0px'}}
-																						checked = {values.account}
-																						onChange={(e : any) => handleInputChange({ target : { id : 'account', value : e.target.checked } })}
-																					/>}
-																				label={																																															
-																					<Typography>
-																				Account
-																					</Typography>}
-																			/>  
-																		</div>
-																		
-																		<FormControlLabel 
-																			control={
-																				<Checkbox 
-																					sx={{padding : '0px'}}
-																					checked = {values.created}
-																					onChange={(e : any) => handleInputChange({ target : { id : 'created', value : e.target.checked } })}
-																				/>}
-																			label={
-																				<Typography>
-																				Created
-																				</Typography>}
-																		/>  
-																		<FormControlLabel 
-																			control={
-																				<Checkbox 
-																					sx={{padding : '0px'}}
-																					checked = {values.modified}
-																					onChange={(e : any) => handleInputChange({ target : { id : 'modified', value : e.target.checked } })}
-																				/>}
-																			label={
-																				<Typography>
-																				Modified
-																				</Typography>}
-																		/>  
-																		<FormControlLabel 
-																			control={
-																				<Checkbox 
-																					sx={{padding : '0px'}}
-																					checked = {values.quotes}
-																					onChange={(e : any) => handleInputChange({ target : { id : 'quotes', value : e.target.checked } })}
-																				/>}
-																			label={
-																				<Typography>
-																				Quotes
-																				</Typography>}
-																		/>  
-																		<FormControlLabel 
-																			control={
-																				<Checkbox 
-																					sx={{padding : '0px'}}
-																					checked = {values.pricingTier}
-																					onChange={(e : any) => handleInputChange({ target : { id : 'pricingTier', value : e.target.checked } })}
-																				/>}
-																			label={
-																				<Typography>
-																				Pricing Tags
-																				</Typography>}
-																		/>
+																	<FormGroup>{
+																		allColumns.map((column: any) => (
+																			<div  key={column.id} >
+																				<FormControlLabel 
+																					control={<Checkbox sx={{padding : '0px'}} 
+																						{...column.getToggleHiddenProps()} 
+																					/>} label={column.id} />
+																			</div>
+																		))}
 																	</FormGroup>
+																	
+																	
 																</MenuItem>
 															</MenuList>
 														</ClickAwayListener>
