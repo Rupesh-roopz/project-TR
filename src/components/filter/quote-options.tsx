@@ -4,51 +4,51 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const QuoteFilter = (props : any) => {
-	const { column } = props;
-	const { preFilteredRows, setFilter, setAllFilters} = column;
+	const { column, setFilterValue } = props;
+	const { preFilteredRows, setFilter, filterTypes} = column;
 	
 	const [ equal, setEqual] = useState('');
 	const [ greaterthan, setgreaterthan] = useState('');
 	const [ lessthan, setlessthan] = useState('');
-
-	const quoteFilterTypes = React.useMemo(
-		() => ({
-			greater: (rows:any, filterValue:any) => {
-				console.log(rows, filterValue);
-				const arr: any[]= [];
-				rows.forEach((val: any) => {
-					if(val.original.quotes >= filterValue){
-						arr.push(val);
-						console.log(val.values.quotes);	
-					}
-				});
-				console.log(arr);
-				return arr;
-			},
-			lesser : (rows:any, filterValue:any) => {
-				const arr: any[]= [];
-				rows.forEach((val: any) => {
-					if(val.original.quotes <= filterValue){
-						arr.push(val);
-						console.log(val.values.quotes);	
-					}	
-				});
-				console.log(arr);
-				return arr;
-			},
-			equal : (rows:any, filterValue:any) => {
-				const arr: any[]= [];
-				rows.forEach((val: any) => {
-					if(val.original.quotes == filterValue){
-						arr.push(val);
-						console.log(val.values.quotes);	
-					}	
-				});
-				console.log(arr);
-				return arr;
-			}
-		}),
-		[]);
+	console.log(props);
+	// const quoteFilterTypes = React.useMemo(
+	// 	() => ({
+	// 		greater: (rows:any, filterValue:any) => {
+	// 			console.log(rows, filterValue);
+	// 			const arr: any[]= [];
+	// 			rows.forEach((val: any) => {
+	// 				if(val.original.quotes >= filterValue){
+	// 					arr.push(val);
+	// 					console.log(val.values.quotes);	
+	// 				}
+	// 			});
+	// 			console.log(arr);
+	// 			return arr;
+	// 		},
+	// 		lesser : (rows:any, filterValue:any) => {
+	// 			const arr: any[]= [];
+	// 			rows.forEach((val: any) => {
+	// 				if(val.original.quotes <= filterValue){
+	// 					arr.push(val);
+	// 					console.log(val.values.quotes);	
+	// 				}	
+	// 			});
+	// 			console.log(arr);
+	// 			return arr;
+	// 		},
+	// 		equal : (rows:any, filterValue:any) => {
+	// 			const arr: any[]= [];
+	// 			rows.forEach((val: any) => {
+	// 				if(val.original.quotes == filterValue){
+	// 					arr.push(val);
+	// 					console.log(val.values.quotes);	
+	// 				}	
+	// 			});
+	// 			console.log(arr);
+	// 			return arr;
+	// 		}
+	// 	}),
+	// 	[]);
 	return (
 		<div>
 			<div>
@@ -59,7 +59,8 @@ const QuoteFilter = (props : any) => {
 					onChange={(e) => {
 						setEqual(e.target.value);
 						setFilter(e.target.value);
-						quoteFilterTypes.lesser(preFilteredRows, parseInt(e.target.value, 10));
+						column.filter = 'lesser';
+						// filterTypes.lesser(preFilteredRows, parseInt(e.target.value, 10));
 					}}
 				/>
 			</div>
@@ -71,7 +72,8 @@ const QuoteFilter = (props : any) => {
 					onChange={(e) => {
 						setgreaterthan(e.target.value);
 						setFilter(e.target.value);
-						quoteFilterTypes.greater(preFilteredRows, parseInt(e.target.value, 10));
+						column.filter = 'greater';
+						// filterTypes.greater(preFilteredRows, parseInt(e.target.value, 10));
 					}}
 				/>
 			</div>
@@ -83,7 +85,8 @@ const QuoteFilter = (props : any) => {
 					onChange={(e) => {
 						setlessthan(e.target.value);
 						setFilter(e.target.value);
-						quoteFilterTypes.equal(preFilteredRows, parseInt(e.target.value, 10));
+						column.filter = 'equal';
+						// filterTypes.equal(preFilteredRows, parseInt(e.target.value, 10));
 					}}
 				/>
 			</div>

@@ -2,7 +2,7 @@ import { format, formatRelative } from 'date-fns';
 import ReferenceFilter from './filter/text';
 import {SelectColumnFilter, MultipleFilter} from './filter/pricingTier';
 import QuoteFilter from './filter/quote-options';
-
+import DateFilter from './filter/date';
 
 // const greater = (rows:any, filterValue:any) => {
 // 	console.log(rows, filterValue);
@@ -70,7 +70,7 @@ export const Columns = [
 		Header : 'Created',
 		accessor: 'created',
 		Cell : (row :any) => {return format(new Date(row.value), 'd MMM yy');},
-		disableFilters:true
+		Filter : DateFilter
 	},
 	{
 		Header : 'Modified',
@@ -81,12 +81,12 @@ export const Columns = [
 	{
 		Header : 'Quotes',
 		accessor: 'quotes',
-		filter : 'greater',
-		filterTypes : {
-			greater : 'greater',
-			lesser : 'lesser',
-			equal : 'equal'
-		},
+		filter : 'lesser',
+		// filterTypes : {
+		// 	greater : 'greater',
+		// 	lesser : 'lesser',
+		// 	equal : 'equal'
+		// },
 		Filter : QuoteFilter
 	},
 	{

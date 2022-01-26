@@ -19,23 +19,64 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import SortingRows from './sorting';
 import MenuIcon from './menuIcon';
-
-type columnsProps = {
-    Header: string;
-    accessor: string;
-}[];
   
 const ResponsiveTable = (props:any) => {
-	const {columnData, mockdata, toggleSortBy} = props;
-	const  [ selectedMenu, setSelectedMenu] = useState('');
-	
+	const {columnData, mockdata} = props;
+	// const [filter, setFilterValue] = useState('');
 	const columns = useMemo(() => columnData,[]);
 	const data = useMemo(() => mockdata, []);
 	
 
+	
+
+	const filterTypes = React.useMemo(
+		() => ({
+			greater: (rows:any, id:any, filterValue:any) => {
+				console.log(rows, filterValue);
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					if(val.original.quotes >= filterValue){
+						arr.push(val);
+						console.log(val.values.quotes);	
+					}
+				});
+				console.log(arr);
+				return arr;
+			},
+			lesser : (rows:any, id:any, filterValue:any) => {
+				console.log(rows,id,filterValue);
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					if(val.original.quotes <= filterValue){
+						arr.push(val);
+						console.log(val.values.quotes);	
+					}	
+				});
+				console.log(arr);
+				return arr;
+			},
+			equal : (rows:any, id:any, filterValue:any) => {
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					if(val.original.quotes == filterValue){
+						arr.push(val);
+						console.log(val.values.quotes);	
+					}	
+				});
+				console.log(arr);
+				return arr;
+			}
+		}),
+		[]);
+	// console.log(filter);
 	const tableInstance = useTable({
-		columns, data
+		columns,
+		data,
+		// filter,
+		// setFilterValue,
+		filterTypes
 	}, useFilters, useSortBy);
+
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = tableInstance;	
 
 	return (
