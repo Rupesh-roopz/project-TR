@@ -11,44 +11,7 @@ const QuoteFilter = (props : any) => {
 	const [ greaterthan, setgreaterthan] = useState('');
 	const [ lessthan, setlessthan] = useState('');
 	console.log(props);
-	// const quoteFilterTypes = React.useMemo(
-	// 	() => ({
-	// 		greater: (rows:any, filterValue:any) => {
-	// 			console.log(rows, filterValue);
-	// 			const arr: any[]= [];
-	// 			rows.forEach((val: any) => {
-	// 				if(val.original.quotes >= filterValue){
-	// 					arr.push(val);
-	// 					console.log(val.values.quotes);	
-	// 				}
-	// 			});
-	// 			console.log(arr);
-	// 			return arr;
-	// 		},
-	// 		lesser : (rows:any, filterValue:any) => {
-	// 			const arr: any[]= [];
-	// 			rows.forEach((val: any) => {
-	// 				if(val.original.quotes <= filterValue){
-	// 					arr.push(val);
-	// 					console.log(val.values.quotes);	
-	// 				}	
-	// 			});
-	// 			console.log(arr);
-	// 			return arr;
-	// 		},
-	// 		equal : (rows:any, filterValue:any) => {
-	// 			const arr: any[]= [];
-	// 			rows.forEach((val: any) => {
-	// 				if(val.original.quotes == filterValue){
-	// 					arr.push(val);
-	// 					console.log(val.values.quotes);	
-	// 				}	
-	// 			});
-	// 			console.log(arr);
-	// 			return arr;
-	// 		}
-	// 	}),
-	// 	[]);
+	
 	return (
 		<div>
 			<div>

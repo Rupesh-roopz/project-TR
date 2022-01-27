@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 /* eslint-disable react/jsx-key */
 import React, { useMemo, useState } from 'react';
 import { Button, Grid, iconClasses, TableSortLabel, Typography } from '@mui/material';
@@ -19,6 +20,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import SortingRows from './sorting';
 import MenuIcon from './menuIcon';
+import { boxSizing } from '@mui/system';
+import { Box } from '@material-ui/core';
   
 const ResponsiveTable = (props:any) => {
 	const {columnData, mockdata} = props;
@@ -35,7 +38,7 @@ const ResponsiveTable = (props:any) => {
 				console.log(rows, filterValue);
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
-					if(val.original.quotes >= filterValue){
+					if(val.original[id] >= filterValue){
 						arr.push(val);
 						console.log(val.values.quotes);	
 					}
@@ -47,7 +50,7 @@ const ResponsiveTable = (props:any) => {
 				console.log(rows,id,filterValue);
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
-					if(val.original.quotes <= filterValue){
+					if(val.original[id] <= filterValue){
 						arr.push(val);
 						console.log(val.values.quotes);	
 					}	
@@ -58,14 +61,61 @@ const ResponsiveTable = (props:any) => {
 			equal : (rows:any, id:any, filterValue:any) => {
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
-					if(val.original.quotes == filterValue){
+					if(val.original[id] == filterValue){
 						arr.push(val);
 						console.log(val.values.quotes);	
 					}	
 				});
 				console.log(arr);
 				return arr;
-			}
+			},
+			before : (rows:any, id:any, filterValue:any) => {
+				console.log(rows,id,filterValue);
+				const filterValueSeconds = new Date(filterValue).setHours(0,0,0,0);
+				console.log(filterValueSeconds);
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					console.log(val.original.created , filterValue,val.original.created <= filterValue);
+					const rowValueSeconds = new Date(val.original[id]).setHours(0,0,0,0);
+					console.log(rowValueSeconds);
+					if(rowValueSeconds <= filterValueSeconds){
+						arr.push(val);	
+					}	
+				});
+				console.log(arr);
+				return arr;
+			},
+			after : (rows:any, id:any, filterValue:any) => {
+				console.log(rows,id,filterValue);
+				const filterValueSeconds = new Date(filterValue).setHours(0,0,0,0);
+				console.log(filterValueSeconds);
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					console.log(val.original.created , filterValue,val.original.created <= filterValue);
+					const rowValueSeconds = new Date(val.original[id]).setHours(0,0,0,0);
+					console.log(rowValueSeconds);
+					if(rowValueSeconds >= filterValueSeconds){
+						arr.push(val);
+						// console.log(val.values.quotes);	
+					}	
+				});
+				console.log(arr);
+				return arr;
+			},
+			on : (rows:any, id:any, filterValue:any) => {
+				const filterValueSeconds = new Date(filterValue).setHours(0,0,0,0);
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					const rowValueSeconds = new Date(val.original[id]).setHours(0,0,0,0);
+					console.log(rowValueSeconds);
+					if(rowValueSeconds === filterValueSeconds){
+						arr.push(val);
+						// console.log(val.values.quotes);	
+					}	
+				});
+				console.log(arr);
+				return arr;
+			},
 		}),
 		[]);
 	// console.log(filter);
@@ -80,7 +130,8 @@ const ResponsiveTable = (props:any) => {
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = tableInstance;	
 
 	return (
-		<TableContainer component={Paper} sx={{ width : '100%', height : '300px' }} >
+		
+		<TableContainer component={Paper} sx={{ width : '100%', height : '400px' }} >
 			<Table  size="small" aria-label="a dense table" stickyHeader {...getTableProps()}>
 				<TableHead>
 					{
@@ -150,6 +201,7 @@ const ResponsiveTable = (props:any) => {
 				</TableBody>
 			</Table>
 		</TableContainer>
+		
 	);
 };
 

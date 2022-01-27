@@ -53,49 +53,7 @@ const Calender = (props: any) => {
 			setOpenInner(false);
 		}
 	}
-	return (
-		<>
-			<FormGroup sx={{width:'100%'}}>
-				<FormControlLabel 
-					control={<Checkbox  checked={checked} sx={{padding : '0px'}}/>} 
-					label={
-						<Typography 
-							ref={anchorRefInner}
-							id="compositionI-button"
-							aria-controls={openInner ? 'composition-menu' : undefined}
-							aria-expanded={openInner ? 'true' : undefined}
-							aria-haspopup="true"
-							onClick={handleToggleInner}
-							sx={{ width:'100%' }}
-						>
-                        Filter</Typography>} 
-				/>  
-			</FormGroup>
-			<Popper
-				open={openInner}
-				anchorEl={anchorRefInner.current}
-				// role={undefined}
-				placement="right-start"
-				transition
-				disablePortal
-			>
-				{({ TransitionProps, placement }) => (
-					<Grow
-						{...TransitionProps}
-						style={{
-							transformOrigin: placement === 'right-start' ? 'left top' : 'right bottom',
-						}}
-					>
-						<Paper>
-							<ClickAwayListener onClickAway={handleCloseInner}>
-								<h1>Rupesh</h1>
-							</ClickAwayListener>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
-		</>
-	);
+	return <h1>Rupesh</h1>;
 };
 
 export default Calender;

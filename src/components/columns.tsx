@@ -1,45 +1,9 @@
-import { format, formatRelative } from 'date-fns';
+import { format } from 'date-fns';
 import ReferenceFilter from './filter/text';
 import {SelectColumnFilter, MultipleFilter} from './filter/pricingTier';
 import QuoteFilter from './filter/quote-options';
 import DateFilter from './filter/date';
 
-// const greater = (rows:any, filterValue:any) => {
-// 	console.log(rows, filterValue);
-// 	const arr: any[]= [];
-// 	rows.forEach((val: any) => {
-// 		if(val.original.quotes >= filterValue){
-// 			arr.push(val);
-// 			console.log(val.values.quotes);	
-// 		}
-// 	});
-// 	console.log(arr);
-// 	return arr;
-// };
-
-// const lesser = (rows:any, filterValue:any) => {
-// 	const arr: any[]= [];
-// 	rows.forEach((val: any) => {
-// 		if(val.original.quotes <= filterValue){
-// 			arr.push(val);
-// 			console.log(val.values.quotes);	
-// 		}	
-// 	});
-// 	console.log(arr);
-// 	return arr;
-// };
-
-// const equal = (rows:any, filterValue:any) => {
-// 	const arr: any[]= [];
-// 	rows.forEach((val: any) => {
-// 		if(val.original.quotes == filterValue){
-// 			arr.push(val);
-// 			console.log(val.values.quotes);	
-// 		}	
-// 	});
-// 	console.log(arr);
-// 	return arr;
-// };
 
 export const Columns = [
 	{
@@ -63,20 +27,23 @@ export const Columns = [
 	{
 		Header : 'Account',
 		accessor: 'account',
-		Filter : ReferenceFilter
+		Filter : ReferenceFilter,
+		isFilterChecked : true
 		
 	},
 	{
 		Header : 'Created',
 		accessor: 'created',
 		Cell : (row :any) => {return format(new Date(row.value), 'd MMM yy');},
+		filter : 'before',
 		Filter : DateFilter
 	},
 	{
 		Header : 'Modified',
 		accessor: 'modified',
 		Cell : (row :any) => {return format(new Date(row.value), 'd MMM yy');},
-		disableFilters:true
+		filter : 'before',
+		Filter : DateFilter
 	},
 	{
 		Header : 'Quotes',

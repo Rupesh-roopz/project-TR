@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,25 +23,37 @@ import { styled } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
 import ReferenceFilter from './filter/text';
 // import PricingTierFilter from './filter/pricingTier';
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const FilterMenu = (props : any) => {
 	const { column } = props;
-	const [ checked, setChecked ] = useState(false);
+	const [ checked, setChecked ] = useState(true);
 	const [openInner, setOpenInner] = React.useState(false);
 	const anchorRefInner = React.useRef<HTMLButtonElement>(null);
 
-	const handleToggleInner = () => {
+	// console.log(props);
+
+	const handleFilterCheck = (e: any) => {
+		// setChecked((prev)=>!prev);
+		setChecked(e.target.checked);
+
+		e.target.checked ? column.isFilterChecked = true : column.isFilterChecked = false; 
+	};
+
+	const handleToggleInner = (e: any) => {
 		setOpenInner((prevOpen) => !prevOpen);
+		setChecked(checked);
+		// e.target.checked ? column.isFilterChecked = true : column.isFilterChecked = false; 
 	};
 
 	const handleCloseInner = (event: Event | React.SyntheticEvent) => {
 		if (
 			anchorRefInner.current &&
-			anchorRefInner.current.contains(event.target as HTMLElement)
+				anchorRefInner.current.contains(event.target as HTMLElement)
 		) {
 			return;
 		}
-  
+	
 		setOpenInner(false);
 	};
 
@@ -56,9 +68,32 @@ const FilterMenu = (props : any) => {
 	}
 	return (
 		<>
-			<FormGroup sx={{width:'100%'}}>
+			<Checkbox 
+				
+				checked={checked} 
+				{...label} sx={{padding : '0px'}} 
+				onClick={(e)=>{handleFilterCheck(e);}}
+				// defaultChecked 
+			/>
+			<Typography 
+				ref={anchorRefInner}
+				id="compositionI-button"
+				aria-controls={openInner ? 'composition-menu' : undefined}
+				aria-expanded={openInner ? 'true' : undefined}
+				aria-haspopup="true"
+				// onClick={handleToggleInner}
+				onClick={(e)=>handleToggleInner(e)}
+				sx={{ width:'100%' }}
+			>
+							Filter</Typography>
+			{/* <FormGroup sx={{width:'100%'}} >
 				<FormControlLabel 
-					control={<Checkbox  checked={checked} sx={{padding : '0px'}}/>} 
+					control={<Checkbox  
+						checked={checked} 
+						sx={{padding : '0px'}}  
+						onClick={(e)=>{handleFilterCheck(e);}}
+						// onClick={(e)=>handleToggleInner(e)}
+					/>} 
 					label={
 						<Typography 
 							ref={anchorRefInner}
@@ -66,12 +101,13 @@ const FilterMenu = (props : any) => {
 							aria-controls={openInner ? 'composition-menu' : undefined}
 							aria-expanded={openInner ? 'true' : undefined}
 							aria-haspopup="true"
-							onClick={handleToggleInner}
+							// onClick={handleToggleInner}
+							onClick={(e)=>handleToggleInner(e)}
 							sx={{ width:'100%' }}
 						>
-                        Filter</Typography>} 
+							Filter</Typography>} 
 				/>  
-			</FormGroup>
+			</FormGroup> */}
 			<Popper
 				open={openInner}
 				anchorEl={anchorRefInner.current}
@@ -88,20 +124,23 @@ const FilterMenu = (props : any) => {
 						}}
 					>
 						<Paper>
-							<ClickAwayListener onClickAway={handleCloseInner}>
-								<MenuList
-									autoFocusItem={openInner}
-									id="composition-menu"
-									aria-labelledby="composition-button"
-									onKeyDown={handleListKeyDownInner}
-								>
-									<MenuItem onClick={()=>{setChecked(true);}}>
+							{/* <ClickAwayListener onClickAway={handleCloseInner}> */}
+							<MenuList
+								autoFocusItem={openInner}
+								id="composition-menu"
+								aria-labelledby="composition-button"
+								onKeyDown={handleListKeyDownInner}
+							>
+								<MenuItem onClick={()=>{setChecked(true);}}>
+									<div>
 										{
 											column.canFilter ? column.render('Filter') : null
 										}
-									</MenuItem>
-								</MenuList>
-							</ClickAwayListener>
+									</div>
+										
+								</MenuItem>
+							</MenuList>
+							{/* </ClickAwayListener> */}
 						</Paper>
 					</Grow>
 				)}
