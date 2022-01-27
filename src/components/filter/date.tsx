@@ -55,7 +55,7 @@ const DateFilter = (props: any) => {
 		value === 'before' ? column.filter = 'before' : '';
 		value === 'after' ? column.filter = 'after' : '';
 		value === 'on' ? column.filter = 'on' : '';
-
+		
 		setFilter(date);
 	};
 

@@ -10,13 +10,14 @@ export const Columns = [
 		Header : 'Sig',
 		accessor : 'sig',
 		disableSortBy: true,
-		disableFilters:true
+		disableFilters:true,
+		Filter : ReferenceFilter
 	},
 	{
 		Header : ' ',
 		accessor : 'empty',
 		disableSortBy: true,
-		disableFilters:true
+		disableFilters:true,
 	},
 	{
 		Header : 'Reference',
@@ -28,8 +29,8 @@ export const Columns = [
 		Header : 'Account',
 		accessor: 'account',
 		Filter : ReferenceFilter,
-		isFilterChecked : true
-		
+		isFilterChecked : true,
+		filterCheckbox : false,
 	},
 	{
 		Header : 'Created',

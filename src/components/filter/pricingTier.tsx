@@ -21,6 +21,7 @@ export function SelectColumnFilter(props : any) {
 	const { column } = props;
 	const { filterValue = [], setFilter, preFilteredRows, id } = column;
 
+	console.log(column);
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row: { values: { [x: string]: unknown; }; }) => {
@@ -29,9 +30,12 @@ export function SelectColumnFilter(props : any) {
 		return [...options.values()];
 	  }, [id, preFilteredRows]);
 
-	  function setFilteredParams(filterArr:any, val:any) {
-		console.log(filterArr);
-		console.log(val);
+	  function setFilteredParams(filterArr:any, val:any, i: number) {
+		const updatedCheckedState = checkedState.map((item, index) =>
+			index === i ? !item : item
+		);
+
+		setCheckedState(updatedCheckedState);
 		// if (val === undefined) return undefined;
 		if (filterArr.includes(val)) {
 		  filterArr = filterArr.filter((n: any) => {
@@ -43,28 +47,28 @@ export function SelectColumnFilter(props : any) {
 		return filterArr;
 	}
 
+	const [checkedState, setCheckedState] = useState(
+		new Array(options.length).fill(false)
+	);
+	
 	return (
 	  <Fragment>
 			<div className="block">
-		  <span className="block capitalize mb-4">{id}</span>
 		  {options.map((option: any, i) => {
 					return (
 			  <Fragment key={i}>
 							<div className="flex items-center">
 				  <input
 									type="checkbox"
-									className="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
 									id={option}
 									name={option}
 									value={option}
+									checked={checkedState[i]}
 									onChange={(e) => {
-					  					setFilter(setFilteredParams(filterValue, e.target.value));
+					  					setFilter(setFilteredParams(filterValue, e.target.value, i));
 									}}
-				  ></input>
-				  <label
-									htmlFor={option}
-									className="ml-1.5 font-medium text-gray-700"
-				  >
+				  />
+				  <label htmlFor={option}>
 									{option}
 				  </label>
 							</div>

@@ -10,13 +10,13 @@ const ReferenceFilter = (props: any) => {
 	
 
 	useEffect(() => {
-		console.log(column.isFilterChecked);
 		column.isFilterChecked ? setFilter(text) :  setFilter('');
 	},[column.isFilterChecked]);
 
 	const handleTextChange = (value : any) => {
 		setText(value);
 		setFilter(value);
+		value.length === 0 ? column.filterCheckbox = false:  column.filterCheckbox = true;
 	};
 
 	return (

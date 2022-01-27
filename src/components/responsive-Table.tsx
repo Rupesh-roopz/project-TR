@@ -12,7 +12,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import handleState from '../utils/handle-input';
 import MenuDropdown from './dropDown-menu';
 // import './table.css';
 import FormGroup from '@mui/material/FormGroup';
