@@ -22,22 +22,25 @@ export const Columns = [
 	{
 		Header : 'Reference',
 		accessor : 'reference',
-		disableSortBy: true,
-		Filter : ReferenceFilter
+		Filter : ReferenceFilter,
+		filterCheckbox : false,
+		customFilterValue : ''
 	},
 	{
 		Header : 'Account',
 		accessor: 'account',
 		Filter : ReferenceFilter,
-		isFilterChecked : true,
 		filterCheckbox : false,
+		customFilterValue : ''
 	},
 	{
 		Header : 'Created',
 		accessor: 'created',
 		Cell : (row :any) => {return format(new Date(row.value), 'd MMM yy');},
+		filterCheckbox : false,
 		filter : 'before',
-		Filter : DateFilter
+		Filter : DateFilter,
+		customFilterValue : ''
 	},
 	{
 		Header : 'Modified',
@@ -50,12 +53,10 @@ export const Columns = [
 		Header : 'Quotes',
 		accessor: 'quotes',
 		filter : 'lesser',
-		// filterTypes : {
-		// 	greater : 'greater',
-		// 	lesser : 'lesser',
-		// 	equal : 'equal'
-		// },
-		Filter : QuoteFilter
+		Filter : QuoteFilter,
+		customFilterValue : '',
+		customOption : '',
+		filterCheckbox : false,
 	},
 	{
 		Header : 'Pricing Tier',

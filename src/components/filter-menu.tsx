@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -27,28 +27,15 @@ const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const FilterMenu = (props : any) => {
 	const { column } = props;
-	const [ checked, setChecked ] = useState(false);
+	const [ checked, setChecked ] = useState(column.filterCheckbox );
 	const [openInner, setOpenInner] = React.useState(false);
 	const anchorRefInner = React.useRef<HTMLButtonElement>(null);
 
-	// console.log(props);
-	// useState(()=>{setChecked(column.filterCheckbox);},[column.filterCheckbox)]);
-	useEffect(() => {
-		column.filterCheckbox ? setChecked(column.filterCheckbox) : null;
-		// setChecked(column.filterCheckbox);
-	},[column.filterCheckbox]);
-
-
-	const handleFilterCheck = (e: any) => {
-		// setChecked((prev)=>!prev);
-		setChecked(e.target.checked);
-		e.target.checked ? column.isFilterChecked = true : column.isFilterChecked = false; 
-	};
+	checked ? column.filterCheckbox = true : column.filterCheckbox = false;
 
 	const handleToggleInner = (e: any) => {
-		setOpenInner((prevOpen) => !prevOpen);
-		setChecked(checked);
-		// e.target.checked ? column.isFilterChecked = true : column.isFilterChecked = false; 
+		setOpenInner(true);
+		column.customFilterValue !== '' ? setChecked((prevState: boolean) => !prevState) :setChecked(false);
 	};
 
 	const handleCloseInner = (event: Event | React.SyntheticEvent) => {
@@ -72,90 +59,68 @@ const FilterMenu = (props : any) => {
 		}
 	}
 	return (
-		<>
-			<Checkbox 
-				
-				checked={checked} 
-				{...label} sx={{padding : '0px'}} 
-				onClick={(e)=>{handleFilterCheck(e);}}
-				// defaultChecked 
-			/>
-			<Typography 
-				ref={anchorRefInner}
-				id="compositionI-button"
-				aria-controls={openInner ? 'composition-menu' : undefined}
-				aria-expanded={openInner ? 'true' : undefined}
-				aria-haspopup="true"
-				// onClick={handleToggleInner}
-				onClick={(e)=>handleToggleInner(e)}
-				sx={{ width:'100%' }}
-			>
-							Filter</Typography>
-			{/* <FormGroup sx={{width:'100%'}} >
-				<FormControlLabel 
-					control={<Checkbox  
-						checked={checked} 
-						sx={{padding : '0px'}}  
-						onClick={(e)=>{handleFilterCheck(e);}}
-						// onClick={(e)=>handleToggleInner(e)}
-					/>} 
-					label={
-						<Typography 
+		<Fragment>
+			<ClickAwayListener onClickAway={handleCloseInner}>
+				<div>
+					<FormGroup sx={{width:'100%'}} >
+						<FormControlLabel 
 							ref={anchorRefInner}
-							id="compositionI-button"
-							aria-controls={openInner ? 'composition-menu' : undefined}
-							aria-expanded={openInner ? 'true' : undefined}
-							aria-haspopup="true"
-							// onClick={handleToggleInner}
-							onClick={(e)=>handleToggleInner(e)}
-							sx={{ width:'100%' }}
-						>
-							Filter</Typography>} 
-				/>  
-			</FormGroup> */}
-			{
-				column.canFilter 
-					? <Popper
-						open={openInner}
-						anchorEl={anchorRefInner.current}
-						// role={undefined}
-						placement="right-start"
-						transition
-						disablePortal
-					>
-						{({ TransitionProps, placement }) => (
-							<Grow
-								{...TransitionProps}
-								style={{
-									transformOrigin: placement === 'right-start' ? 'left top' : 'right bottom',
-								}}
+							sx={{width:'100%'}}
+							control={<Checkbox  
+								checked={checked} 
+								sx={{padding : '0px'}}
+								aria-controls={openInner ? 'composition-menu' : undefined}
+								aria-expanded={openInner ? 'true' : undefined}
+								aria-haspopup="true"
+								onClick={(e)=>handleToggleInner(e)}
+						
+							/>} 
+							label="Filter"
+					
+						/>  
+					</FormGroup>
+					{
+						column.canFilter 
+							? <Popper
+								open={openInner}
+								anchorEl={anchorRefInner.current}
+								placement="right-start"
+								transition
+								disablePortal
 							>
-								<Paper>
-									{/* <ClickAwayListener onClickAway={handleCloseInner}> */}
-									<MenuList
-										autoFocusItem={openInner}
-										id="composition-menu"
-										aria-labelledby="composition-button"
-										onKeyDown={handleListKeyDownInner}
+								{({ TransitionProps, placement }) => (
+									<Grow
+										{...TransitionProps}
+										style={{
+											transformOrigin: placement === 'right-start' ? 'left top' : 'right bottom',
+										}}
 									>
-										<MenuItem onClick={()=>{setChecked(true);}}>
-											<div>
-												{
-													column.canFilter ? column.render('Filter') : null
-												}
-											</div>
+										<Paper>
+											<MenuList
+												autoFocusItem={openInner}
+												id="composition-menu"
+												aria-labelledby="composition-button"
+												onKeyDown={handleListKeyDownInner}
+											>
+												<MenuItem onClick={()=>{setChecked(true);}}>
+													<div>
+														{
+															column.canFilter ? column.render('Filter') : null
+														}
+													</div>
 										
-										</MenuItem>
-									</MenuList>
-									{/* </ClickAwayListener> */}
-								</Paper>
-							</Grow>
-						)}
-					</Popper>
-					: null
-			}
-			
-		</>
+												</MenuItem>
+											</MenuList>
+									
+										</Paper>
+									</Grow>
+								)}
+							</Popper>
+							: null
+					}
+				</div>
+			</ClickAwayListener>
+		</Fragment>
 	);
 };
 

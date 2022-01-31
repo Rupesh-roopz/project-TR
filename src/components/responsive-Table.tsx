@@ -24,12 +24,9 @@ import { Box } from '@material-ui/core';
   
 const ResponsiveTable = (props:any) => {
 	const {columnData, mockdata} = props;
-	// const [filter, setFilterValue] = useState('');
+	
 	const columns = useMemo(() => columnData,[]);
 	const data = useMemo(() => mockdata, []);
-	
-
-	
 
 	const filterTypes = React.useMemo(
 		() => ({
@@ -37,7 +34,7 @@ const ResponsiveTable = (props:any) => {
 				console.log(rows, filterValue);
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
-					if(val.original[id] >= filterValue){
+					if(val.original[id] > filterValue){
 						arr.push(val);
 						console.log(val.values.quotes);	
 					}
@@ -49,7 +46,7 @@ const ResponsiveTable = (props:any) => {
 				console.log(rows,id,filterValue);
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
-					if(val.original[id] <= filterValue){
+					if(val.original[id] < filterValue){
 						arr.push(val);
 						console.log(val.values.quotes);	
 					}	
@@ -71,12 +68,9 @@ const ResponsiveTable = (props:any) => {
 			before : (rows:any, id:any, filterValue:any) => {
 				console.log(rows,id,filterValue);
 				const filterValueSeconds = new Date(filterValue).setHours(0,0,0,0);
-				console.log(filterValueSeconds);
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
-					console.log(val.original.created , filterValue,val.original.created <= filterValue);
 					const rowValueSeconds = new Date(val.original[id]).setHours(0,0,0,0);
-					console.log(rowValueSeconds);
 					if(rowValueSeconds <= filterValueSeconds){
 						arr.push(val);	
 					}	

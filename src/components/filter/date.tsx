@@ -34,37 +34,75 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControl from '@mui/material/FormControl';
+import { convertToObject } from 'typescript';
+
+const checkboxBefore = { inputProps: { 'aria-label': 'Checkbox before' } };
+const checkboxAfter = { inputProps: { 'aria-label': 'Checkbox before' } };
+const checkboxOn = { inputProps: { 'aria-label': 'Checkbox before' } };
+
 
 const DateFilter = (props: any) => {
 	const { column, setFilterValue } = props;
 	const { preFilteredRows, setFilter, filterValue} = column;
 
+	//setting filter state for before, after, on
+	const [beforeCheckBox, setBeforeCheckBox] = useState(false);
+	const [afterCheckBox, setAfterCheckBox] = useState(false);
+	const [onCheckBox, setOnCheckBox] = useState(false);
+
+	//handling filter check
+	const handleBeforeCheckBox = (e : any) => {
+		console.log(e);
+		setBeforeCheckBox(e.target.checked);
+		e.target.checked ? column.filterCheckbox = true : column.filterCheckbox = false;  
+		console.log(column.filterCheckbox);
+	};
 	const [ checked, setChecked ] = useState(true);
 	const [date, changeDate] = useState(new Date());
 	const [startDate, setStartDate] = useState(new Date());
 
 	const [value, setValue] = useState('');
 
-	const handleBefore = (e: any) => {
+	// checked ? column.filterCheckbox = true : column.filterCheckbox = false;
+	// useEffect(() => {
+	// 	column.filterCheckbox && column.customFilterValue !== '' ? setFilter(column.customFilterValue) :  setFilter('');
+	// },[column.filterCheckbox, column.customFilterValue]);
+
+	const handleToggleInner = (e: any) => {
+		setOpenInner(true);
 		setValue(e.target.value);
-		console.log(e.target.value);
+		setBeforeCheckBox(prevState => !prevState);
+		setAfterCheckBox(false);
+		setOnCheckBox(false);
 	};
+
+	const handleAfterCheckbox = (e: any) => {
+		setOpenInner(true);
+		setValue(e.target.value);
+		setAfterCheckBox(prevState => !prevState);
+		setBeforeCheckBox(false);
+		setOnCheckBox(false);
+	};
+
+	const handleOncheckbox = (e: any) => {
+		setOpenInner(true);
+		setValue(e.target.value);
+		setOnCheckBox(prevState => !prevState);
+		setAfterCheckBox(false);
+		setBeforeCheckBox(false);
+	};
+
 	const handleDateChange = (date: any) => {
 		setStartDate(date); 
-		console.log(value);
-		value === 'before' ? column.filter = 'before' : '';
+		column.customFilterValue = date;
+		value === 'before' ? (column.filter = 'before' , setBeforeCheckBox(true)): '';
 		value === 'after' ? column.filter = 'after' : '';
 		value === 'on' ? column.filter = 'on' : '';
-		
 		setFilter(date);
 	};
 
 	const [openInner, setOpenInner] = React.useState(false);
 	const anchorRefInner = React.useRef<HTMLButtonElement>(null);
-	
-	const handleToggleInner = () => {
-		setOpenInner((prevOpen) => !prevOpen);
-	};
 
 	const handleCloseInner = (event: Event | React.SyntheticEvent) => {
 		if (
@@ -86,90 +124,99 @@ const DateFilter = (props: any) => {
 	}
 	return (
 		<>
-			<FormGroup sx={{width:'100%'}}>
-				<FormControlLabel 
-					control={<Checkbox  checked={checked} value='before' onChange={(e)=>handleBefore(e)} sx={{padding : '0px'}}/>} 
-					label={
-						<Typography 
+			<ClickAwayListener onClickAway={handleCloseInner}>
+				<div>
+					<FormGroup sx={{width:'100%'}} >
+						<FormControlLabel 
 							ref={anchorRefInner}
-							id="compositionI-button"
-							aria-controls={openInner ? 'composition-menu' : undefined}
-							aria-expanded={openInner ? 'true' : undefined}
-							aria-haspopup="true"
-							onClick={handleToggleInner}
-							sx={{ width:'100%' }}
-						>
-							Before</Typography>} 
-				/>  
-				<FormControlLabel 
-					control={<Checkbox  checked={checked} value='after' onChange={(e)=>handleBefore(e)} sx={{padding : '0px'}}/>} 
-					label={
-						<Typography 
+							sx={{width:'100%'}}
+							control={<Checkbox  
+								checked={beforeCheckBox} 
+								sx={{padding : '0px'}}
+								value='before'
+								aria-controls={openInner ? 'composition-menu' : undefined}
+								aria-expanded={openInner ? 'true' : undefined}
+								aria-haspopup="true"
+								onClick={(e)=>handleToggleInner(e)}
+						
+							/>} 
+							label="Before"
+					
+						/>  
+						<FormControlLabel 
 							ref={anchorRefInner}
-							id="compositionI-button"
-							aria-controls={openInner ? 'composition-menu' : undefined}
-							aria-expanded={openInner ? 'true' : undefined}
-							aria-haspopup="true"
-							onClick={handleToggleInner}
-							sx={{ width:'100%' }}
-						>
-							After</Typography>} 
-				/> 
-				<FormControlLabel 
-					control={<Checkbox  checked={checked} value='on' onChange={(e)=>handleBefore(e)} sx={{padding : '0px'}}/>} 
-					label={
-						<Typography 
+							sx={{width:'100%'}}
+							control={<Checkbox  
+								checked={afterCheckBox} 
+								sx={{padding : '0px'}}
+								aria-controls={openInner ? 'composition-menu' : undefined}
+								aria-expanded={openInner ? 'true' : undefined}
+								aria-haspopup="true"
+								onClick={(e)=>handleAfterCheckbox(e)}
+								value='after'
+						
+							/>} 
+							label="After"
+					
+						/>  
+						<FormControlLabel 
 							ref={anchorRefInner}
-							id="compositionI-button"
-							aria-controls={openInner ? 'composition-menu' : undefined}
-							aria-expanded={openInner ? 'true' : undefined}
-							aria-haspopup="true"
-							onClick={handleToggleInner}
-							sx={{ width:'100%' }}
-						>
-							On</Typography>} 
-				/> 
-			</FormGroup>
-			<Popper
-				open={openInner}
-				anchorEl={anchorRefInner.current}
-				// role={undefined}
-				placement="right"
-				transition
-				disablePortal
-			>
-				{({ TransitionProps, placement }) => (
-					<Grow
-						{...TransitionProps}
-						style={{
-							transformOrigin: placement === 'right-start' ? 'left top' : 'right bottom',
-						}}
+							sx={{width:'100%'}}
+							control={<Checkbox  
+								checked={onCheckBox} 
+								sx={{padding : '0px'}}
+								aria-controls={openInner ? 'composition-menu' : undefined}
+								aria-expanded={openInner ? 'true' : undefined}
+								aria-haspopup="true"
+								onClick={(e)=>handleOncheckbox(e)}
+								value='on'
+							/>} 
+							label="On"
+					
+						/>  
+				
+					</FormGroup>
+					<Popper
+						open={openInner}
+						anchorEl={anchorRefInner.current}
+						// role={undefined}
+						placement="right"
+						transition
+						disablePortal
 					>
-						<Paper>
-							<ClickAwayListener onClickAway={handleCloseInner}>
-								<MenuList
-									autoFocusItem={openInner}
-									id="composition-menu"
-									aria-labelledby="composition-button"
-									onKeyDown={handleListKeyDownInner}
-								>
-									<MenuItem sx={{padding : 0}}>
-										<DatePicker
-											selected={startDate}
-											onChange={(date: any) =>{ handleDateChange(date);}}
-											peekNextMonth
-											showMonthDropdown
-											showYearDropdown
-											dropdownMode="select"
-											inline
-										/>
-									</MenuItem>
-								</MenuList>
-							</ClickAwayListener>
-						</Paper>
-					</Grow>
-				)}
-			</Popper>
+						{({ TransitionProps, placement }) => (
+							<Grow
+								{...TransitionProps}
+								style={{
+									transformOrigin: placement === 'right-start' ? 'left top' : 'right bottom',
+								}}
+							>
+								<Paper>
+							
+									<MenuList
+										autoFocusItem={openInner}
+										id="composition-menu"
+										aria-labelledby="composition-button"
+										onKeyDown={handleListKeyDownInner}
+									>
+										<MenuItem sx={{padding : 0}}>
+											<DatePicker
+												selected={startDate}
+												onChange={(date: any) =>{ handleDateChange(date);}}
+												peekNextMonth
+												showMonthDropdown
+												showYearDropdown
+												dropdownMode="select"
+												inline
+											/>
+										</MenuItem>
+									</MenuList>
+								</Paper>
+							</Grow>
+						)}
+					</Popper>
+				</div>
+			</ClickAwayListener>
 		</>
 	);
 

@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
-import { useSortBy } from 'react-table';
 
 const ReferenceFilter = (props: any) => {
 	
 	const { column } = props;
-	const { filterValue, setFilter} = column;
-	const [text, setText] = useState('');
+	const {setFilter} = column;
+	const [text, setText] = useState(column.customFilterValue);
 	
-
+	console.log(column.filterCheckbox);
+	
 	useEffect(() => {
-		column.isFilterChecked ? setFilter(text) :  setFilter('');
-	},[column.isFilterChecked]);
+		column.filterCheckbox ? setFilter(column.customFilterValue) :  setFilter('');
+	},[column.filterCheckbox, column.customFilterValue]);
 
 	const handleTextChange = (value : any) => {
+		column.customFilterValue = value;
 		setText(value);
 		setFilter(value);
-		value.length === 0 ? column.filterCheckbox = false:  column.filterCheckbox = true;
+		// value === '' ? column.filterCheckbox = false : column.filterCheckbox = true;
 	};
 
 	return (
@@ -27,8 +28,6 @@ const ReferenceFilter = (props: any) => {
 				// value ={filterValue || ''}
 				value ={text}
 				onChange={(e: any) =>handleTextChange(e.target.value)}
-				// onChange={(e) => !column.disableFilters ? setFilter(e.target.value) : null}
-				// onChange = {e => setFilter(e.target.value)}
 				placeholder='Enter Filter Text'
 				autoFocus
 			/>
