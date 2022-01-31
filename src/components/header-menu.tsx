@@ -27,7 +27,7 @@ import FilterMenu from './filter-menu';
 
 const DropdownMenu = (props : any) => {
 	const {open, anchorRef,handleClose, handleListKeyDown, allColumns, toggleSortBy, columnName, column } = props;
-	
+	console.log(column);
 	const handleSortingAsc = () => {
 		toggleSortBy(false, false);
 	};
@@ -62,16 +62,16 @@ const DropdownMenu = (props : any) => {
 								sx={{padding:'0px'}}
 							>
 								{
-									columnName === 'sig' || columnName === 'empty' || columnName === 'reference' 
+									column.canSort 
 										? 
-										<MenuItem disabled sx={{padding : '0px	'}} onClick={handleSortingAsc}>
+										<MenuItem sx={{padding : '0px	'}} onClick={handleSortingAsc}>
 											<Typography sx={{width:'100%' }}>
 												<ArrowUpwardIcon />
 									Sort Ascending
 											</Typography>
 										</MenuItem>
 										: 
-										<MenuItem  sx={{padding : '0px	'}} onClick={handleSortingAsc}>
+										<MenuItem disabled sx={{padding : '0px	'}} onClick={handleSortingAsc}>
 											<Typography sx={{width:'100%' }}>
 												<ArrowUpwardIcon />
 											Sort Ascending
@@ -79,9 +79,9 @@ const DropdownMenu = (props : any) => {
 										</MenuItem>
 								}
 								{
-									columnName === 'sig' || columnName === 'empty' || columnName === 'reference' 
+									column.canSort  
 										? 
-										<MenuItem disabled divider autoFocus sx={{padding : '0px	'}} onClick={handleSortingdesc}>
+										<MenuItem  divider autoFocus sx={{padding : '0px	'}} onClick={handleSortingdesc}>
 											<Typography sx={{width:'100%' }}>
 
 												<ArrowDownwardIcon />
@@ -89,7 +89,7 @@ const DropdownMenu = (props : any) => {
 											</Typography>
 										</MenuItem>
 										: 
-										<MenuItem divider autoFocus sx={{padding : '0px	'}} onClick={handleSortingdesc}>
+										<MenuItem disabled divider autoFocus sx={{padding : '0px	'}} onClick={handleSortingdesc}>
 											<Typography sx={{width:'100%' }}>
 												<ArrowDownwardIcon />
 											Sort Descending

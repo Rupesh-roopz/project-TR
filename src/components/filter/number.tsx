@@ -14,11 +14,12 @@ const QuoteFilter = (props : any) => {
 	console.log(column.customFilterValue);
 	console.log(column.filterCheckbox);
 
-	// useEffect(() => {
-	// 	column.filterCheckbox ? setFilter(filterValue) :  setFilter('');
-	// },[column.filterCheckbox, column.customFilterValue]);
-	
-	// let column.customFilterValue = filterValue;
+	console.log(column.filterCheckbox);
+	useEffect(() => {
+		column.filterCheckbox 
+			? setFilter(filterValue) 
+			: (column.filter='greater', setFilter(0), setEqual(''), setgreaterthan(''), setlessthan(''));
+	},[column.filterCheckbox]);
 	return (
 		<div>
 			<div>

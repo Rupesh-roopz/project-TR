@@ -4,65 +4,33 @@ import {CheckboxFilter} from './filter/checkbox';
 import QuoteFilter from './filter/number';
 import DateFilter from './filter/date';
 
+const filterFunction = (type: any) => {
+	if(type === 'text') return TextFilter;
+	if(type === 'number') return QuoteFilter;
+	if(type === 'checkbox') return CheckboxFilter;
+	if(type === 'date') return DateFilter;
+};
 
-export const Columns = [
-	{
-		Header : 'Sig',
-		accessor : 'sig',
-		disableSortBy: true,
-		disableFilters:true,
-		Filter : TextFilter
-	},
-	{
-		Header : ' ',
-		accessor : 'empty',
-		disableSortBy: true,
-		disableFilters:true,
-	},
-	{
-		Header : 'Reference',
-		accessor : 'reference',
-		Filter : TextFilter,
-		filterCheckbox : false,
-		customFilterValue : ''
-	},
-	{
-		Header : 'Account',
-		accessor: 'account',
-		Filter : TextFilter,
-		filterCheckbox : false,
-		customFilterValue : ''
-	},
-	{
-		Header : 'Created',
-		accessor: 'created',
-		Cell : (row :any) => {return format(new Date(row.value), 'd MMM yy');},
-		filterCheckbox : false,
-		filter : 'before',
-		Filter : DateFilter,
-		customFilterValue : ''
-	},
-	{
-		Header : 'Modified',
-		accessor: 'modified',
-		Cell : (row :any) => {return format(new Date(row.value), 'd MMM yy');},
-		filter : 'before',
-		Filter : DateFilter
-	},
-	{
-		Header : 'Quotes',
-		accessor: 'quotes',
-		filter : 'lesser',
-		Filter : QuoteFilter,
-		customFilterValue : '',
-		customOption : '',
-		filterCheckbox : false,
-	},
-	{
-		Header : 'Pricing Tier',
-		accessor: 'pricingTier',
-		// filter: MultipleFilter,
-		Filter : CheckboxFilter
-	}
-];
+// const customFilter = (type :string, filterType : string) => {
+// 	if (type === 'checkbox' && filterType === 'multiple')
+// 		return MultipleFilter;
+// };
 
+export const ColumnsGenerate = (props : any) =>  {
+
+	const columns = props.map((column : any) => {
+		return {
+			Header : column.header,
+			accessor : column.field,
+			disableSortBy : !column.sortable,
+			disableFilters : !column.filterable,
+			Filter : filterFunction(column.type),
+			filterCheckbox : false,
+			customFilterValue : '',
+			filterType : column.filterType,
+			Cell : column.type === 'date' ? ((row :any) => {return format(new Date(row.value), 'd MMM yy');}) : ((row :any) => row.value)
+		};
+	});
+	console.log(columns);
+	return columns;
+};

@@ -35,7 +35,7 @@ const FilterMenu = (props : any) => {
 
 	const handleToggleInner = (e: any) => {
 		setOpenInner(true);
-		column.customFilterValue !== '' ? setChecked((prevState: boolean) => !prevState) :setChecked(false);
+		setChecked((prevState: boolean) => !prevState);	
 	};
 
 	const handleCloseInner = (event: Event | React.SyntheticEvent) => {

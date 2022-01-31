@@ -48,7 +48,7 @@ export function CheckboxFilter(props : any) {
 									value={option}
 									checked={checkedState[i]}
 									onChange={(e) => {
-										column.filter = 'multipleFilter';
+										column.filterType === 'multiple' ? column.filter = 'multipleFilter' : null;
 					  					setFilter(setFilteredParams(filterValue, e.target.value, i));
 									}}
 				  />

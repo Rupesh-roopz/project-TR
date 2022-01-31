@@ -5,8 +5,8 @@ import DropdownMenu from './header-menu';
 
 const MenuIcon = (props : any) => {
 	const {columnName,column, allColumns, toggleSortBy} = props;
-	console.log('column', column);
 	const [open, setOpen] = React.useState(false);
+
 	const anchorRef = React.useRef<HTMLButtonElement>(null);
 
 	const handleClose = (event: Event | React.SyntheticEvent) => {
@@ -16,7 +16,6 @@ const MenuIcon = (props : any) => {
 		) {
 			return;
 		}
-  
 		setOpen(false);
 	};
 

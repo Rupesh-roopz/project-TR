@@ -17,28 +17,23 @@ const DateFilter = (props: any) => {
 	const [afterCheckBox, setAfterCheckBox] = useState(false);
 	const [onCheckBox, setOnCheckBox] = useState(false);
 
-	//handling filter check
-	const handleBeforeCheckBox = (e : any) => {
-		console.log(e);
-		setBeforeCheckBox(e.target.checked);
-		e.target.checked ? column.filterCheckbox = true : column.filterCheckbox = false;  
-		console.log(column.filterCheckbox);
-	};
 	const [ checked, setChecked ] = useState(true);
 	const [date, changeDate] = useState(new Date());
 	const [startDate, setStartDate] = useState(new Date());
 
 	const [value, setValue] = useState('');
 
-	// checked ? column.filterCheckbox = true : column.filterCheckbox = false;
-	// useEffect(() => {
-	// 	column.filterCheckbox && column.customFilterValue !== '' ? setFilter(column.customFilterValue) :  setFilter('');
-	// },[column.filterCheckbox, column.customFilterValue]);
+	console.log(column.filterCheckbox);
+	useEffect(() => {
+		column.filterCheckbox 
+			? setFilter(filterValue) 
+			: (column.filter='before', setFilter(new Date()),setBeforeCheckBox(false), setAfterCheckBox(false), setOnCheckBox(false));
+	},[column.filterCheckbox]);
 
-	const handleToggleInner = (e: any) => {
+	const handleBeforeCheckBox = (e: any) => {
 		setOpenInner(true);
 		setValue(e.target.value);
-		setBeforeCheckBox(prevState => !prevState);
+		setBeforeCheckBox(true);
 		setAfterCheckBox(false);
 		setOnCheckBox(false);
 	};
@@ -46,7 +41,7 @@ const DateFilter = (props: any) => {
 	const handleAfterCheckbox = (e: any) => {
 		setOpenInner(true);
 		setValue(e.target.value);
-		setAfterCheckBox(prevState => !prevState);
+		setAfterCheckBox(true);
 		setBeforeCheckBox(false);
 		setOnCheckBox(false);
 	};
@@ -54,7 +49,7 @@ const DateFilter = (props: any) => {
 	const handleOncheckbox = (e: any) => {
 		setOpenInner(true);
 		setValue(e.target.value);
-		setOnCheckBox(prevState => !prevState);
+		setOnCheckBox(true);
 		setAfterCheckBox(false);
 		setBeforeCheckBox(false);
 	};
@@ -104,7 +99,7 @@ const DateFilter = (props: any) => {
 								aria-controls={openInner ? 'composition-menu' : undefined}
 								aria-expanded={openInner ? 'true' : undefined}
 								aria-haspopup="true"
-								onClick={(e)=>handleToggleInner(e)}
+								onClick={(e)=>handleBeforeCheckBox(e)}
 						
 							/>} 
 							label="Before"
