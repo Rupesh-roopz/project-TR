@@ -1,45 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import Divider from '@mui/material/Divider';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ViewColumnOutlinedIcon from '@mui/icons-material/ViewColumnOutlined';
-import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import { Button, ClickAwayListener, FormLabel, Grid, Grow, MenuList, Popper, Typography } from '@mui/material';
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material/styles';
-import ButtonBase from '@mui/material/ButtonBase';
-// import ReferenceFilter from './filter/text';
-import KeyDatePickerContainer from '../calender';
-import DateFnsUtils from '@date-io/date-fns';
-// import { DatePicker } from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import {MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { format } from 'date-fns';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControl from '@mui/material/FormControl';
-import { convertToObject } from 'typescript';
-
-const checkboxBefore = { inputProps: { 'aria-label': 'Checkbox before' } };
-const checkboxAfter = { inputProps: { 'aria-label': 'Checkbox before' } };
-const checkboxOn = { inputProps: { 'aria-label': 'Checkbox before' } };
-
 
 const DateFilter = (props: any) => {
 	const { column, setFilterValue } = props;

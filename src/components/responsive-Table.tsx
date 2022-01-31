@@ -12,20 +12,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import MenuDropdown from './dropDown-menu';
-// import './table.css';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import SortingRows from './sorting';
-import MenuIcon from './menuIcon';
-import { boxSizing } from '@mui/system';
-import { Box } from '@material-ui/core';
-  
+import MenuIcon from './header-icon';
+import {ColumnsGenerate} from './columns-generate';
+
 const ResponsiveTable = (props:any) => {
 	const {columnData, mockdata} = props;
-	
-	const columns = useMemo(() => columnData,[]);
+	const tableColumns = ColumnsGenerate(columnData);
+	const columns = useMemo(() => tableColumns,[]);
 	const data = useMemo(() => mockdata, []);
 
 	const filterTypes = React.useMemo(
@@ -109,6 +102,15 @@ const ResponsiveTable = (props:any) => {
 				console.log(arr);
 				return arr;
 			},
+			multipleFilter :(rows:any, filler:any, filterValue:any) => {
+				const arr: any[]= [];
+				rows.forEach((val: any) => {
+					if (filterValue.includes(val.original.pricingTier)) 
+						arr.push(val);
+				});
+				
+				return arr;
+			}
 		}),
 		[]);
 	// console.log(filter);
@@ -123,7 +125,6 @@ const ResponsiveTable = (props:any) => {
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow, allColumns } = tableInstance;	
 
 	return (
-		
 		<TableContainer component={Paper} sx={{ width : '100%', height : '400px' }} >
 			<Table  size="small" aria-label="a dense table" stickyHeader {...getTableProps()}>
 				<TableHead>

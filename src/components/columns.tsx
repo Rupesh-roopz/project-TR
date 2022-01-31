@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
-import ReferenceFilter from './filter/text';
-import {SelectColumnFilter, MultipleFilter} from './filter/pricingTier';
-import QuoteFilter from './filter/quote-options';
+import TextFilter from './filter/text';
+import {CheckboxFilter} from './filter/checkbox';
+import QuoteFilter from './filter/number';
 import DateFilter from './filter/date';
 
 
@@ -11,7 +11,7 @@ export const Columns = [
 		accessor : 'sig',
 		disableSortBy: true,
 		disableFilters:true,
-		Filter : ReferenceFilter
+		Filter : TextFilter
 	},
 	{
 		Header : ' ',
@@ -22,14 +22,14 @@ export const Columns = [
 	{
 		Header : 'Reference',
 		accessor : 'reference',
-		Filter : ReferenceFilter,
+		Filter : TextFilter,
 		filterCheckbox : false,
 		customFilterValue : ''
 	},
 	{
 		Header : 'Account',
 		accessor: 'account',
-		Filter : ReferenceFilter,
+		Filter : TextFilter,
 		filterCheckbox : false,
 		customFilterValue : ''
 	},
@@ -61,9 +61,8 @@ export const Columns = [
 	{
 		Header : 'Pricing Tier',
 		accessor: 'pricingTier',
-		filter: MultipleFilter,
-		Filter : SelectColumnFilter
-		
+		// filter: MultipleFilter,
+		Filter : CheckboxFilter
 	}
 ];
 

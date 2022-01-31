@@ -1,10 +1,11 @@
 import { IconButton } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import React from 'react';
-import DropdownMenu from './menu';
+import DropdownMenu from './header-menu';
 
 const MenuIcon = (props : any) => {
 	const {columnName,column, allColumns, toggleSortBy} = props;
+	console.log('column', column);
 	const [open, setOpen] = React.useState(false);
 	const anchorRef = React.useRef<HTMLButtonElement>(null);
 

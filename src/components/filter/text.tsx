@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 
-const ReferenceFilter = (props: any) => {
+const TextFilter = (props: any) => {
 	
 	const { column } = props;
 	const {setFilter} = column;
@@ -35,4 +35,4 @@ const ReferenceFilter = (props: any) => {
 	);
 };
 
-export default ReferenceFilter;
+export default TextFilter;

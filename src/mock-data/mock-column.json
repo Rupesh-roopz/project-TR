@@ -1,0 +1,64 @@
+[
+    {
+        "header" : "Sig",
+        "field" : "sig",
+        "filterable" : false,
+        "sortable" : false,
+        "type" : null
+    },
+    {
+        "header" : " ",
+        "field" : "empty",
+        "filterable" : false,
+        "sortable" : false,
+        "type" : null
+    },
+    {
+        "header" : "Reference",
+        "field" : "reference",
+        "filterable" : true,
+        "sortable" : true,
+        "type" : "text",
+        "filterType" : "single"
+    },
+    {
+        "header" : "Account",
+        "field" : "account",
+        "filterable" : true,
+        "sortable" : true,
+        "type" : "text",
+        "filterType" : "single"
+    },
+    {
+        "header" : "Created",
+        "field" : "created",
+        "filterable" : true,
+        "sortable" : true,
+        "type" : "date",
+        "filterType" : "single"
+    },
+    {
+        "header" : "Modified",
+        "field" : "modified",
+        "filterable" : true,
+        "sortable" : true,
+        "type" : "date",
+        "filterType" : "single"
+    },
+    {
+        "header" : "Quotes",
+        "field" : "quotes",
+        "filterable" : true,
+        "sortable" : true,
+        "type" : "number",
+        "filterType" : "multiple"
+    },
+    {
+        "header" : "Pricing Tier",
+        "field" : "pricingTier",
+        "filterable" : true,
+        "sortable" : true,
+        "type" : "checkbox",
+        "filterType" : "multiple"
+    }
+]

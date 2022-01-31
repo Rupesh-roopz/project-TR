@@ -21,7 +21,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import ButtonBase from '@mui/material/ButtonBase';
-import ReferenceFilter from './filter/text';
+import TextFilter from './filter/text';
 // import PricingTierFilter from './filter/pricingTier';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 

@@ -1,27 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-mixed-spaces-and-tabs */
-
 import { Fragment, useMemo, useState } from 'react';
 
-/* eslint-disable react/prop-types */
-export const MultipleFilter = (rows:any, filler:any, filterValue:any) => {
-	const arr: any[]= [];
-	rows.forEach((val: any) => {
-		if (filterValue.includes(val.original.pricingTier)) 
-			arr.push(val);
-	});
-	
-	return arr;
-};
-  
-
-  
-export function SelectColumnFilter(props : any) {
-	console.log(props);
+export function CheckboxFilter(props : any) {
 	const { column } = props;
 	const { filterValue = [], setFilter, preFilteredRows, id } = column;
-
-	console.log(column);
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row: { values: { [x: string]: unknown; }; }) => {
@@ -65,6 +48,7 @@ export function SelectColumnFilter(props : any) {
 									value={option}
 									checked={checkedState[i]}
 									onChange={(e) => {
+										column.filter = 'multipleFilter';
 					  					setFilter(setFilteredParams(filterValue, e.target.value, i));
 									}}
 				  />
