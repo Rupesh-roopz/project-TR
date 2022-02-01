@@ -4,7 +4,7 @@ import SearchIcon from '@mui/icons-material/Search';
 const TextFilter = (props: any) => {
 	const { column } = props;
 	const {setFilter, filterValue} = column;
-	
+	console.log(column);
 	useEffect(() => {
 		column.filterCheckbox ? setFilter(filterValue) :  setFilter('');
 	},[column.filterCheckbox, column.customFilterValue]);

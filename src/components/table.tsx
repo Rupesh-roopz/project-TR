@@ -1,26 +1,25 @@
 /* eslint-disable quotes */
 /* eslint-disable react/jsx-key */
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { Button, Grid, iconClasses, TableSortLabel, Typography } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useFilters, useTable, useSortBy} from 'react-table';
-import Table from '@mui/material/Table';
+import Table from "@mui/material/Table";
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import MenuIcon from './header-icon';
+import HeaderMenu from './header-menu';
 import {ColumnsGenerate} from './columns';
 
-const ResponsiveTable = (props:any) => {
-	const {columnData, mockdata} = props;
-	const tableColumns = ColumnsGenerate(columnData);
-	const columns = useMemo(() => tableColumns,[]);
-	const data = useMemo(() => mockdata, []);
+const TableComponent = (props : any) => {
+	const {columns, data} = props;
 
+	console.log(columns, data);
+	
 	const filterTypes = React.useMemo(
 		() => ({
 			greater: (rows:any, id:any, filterValue:any) => {
@@ -110,12 +109,9 @@ const ResponsiveTable = (props:any) => {
 			}
 		}),
 		[]);
-	// console.log(filter);
 	const tableInstance = useTable({
 		columns,
 		data,
-		// filter,
-		// setFilterValue,
 		filterTypes
 	}, useFilters, useSortBy);
 
@@ -156,7 +152,7 @@ const ResponsiveTable = (props:any) => {
 													
 												</Grid>
 												<Grid item>
-													<MenuIcon
+													<HeaderMenu
 														allColumns = {allColumns.slice(3, 8)}
 														toggleSortBy={column.toggleSortBy}
 														column = {column}
@@ -191,9 +187,9 @@ const ResponsiveTable = (props:any) => {
 					}
 				</TableBody>
 			</Table>
-		</TableContainer>
-		
+		</TableContainer>	
 	);
 };
 
-export default ResponsiveTable;
+
+export default TableComponent;

@@ -4,14 +4,16 @@
         "field" : "sig",
         "filterable" : false,
         "sortable" : false,
-        "type" : null
+        "type" : "",
+        "filterType" : ""
     },
     {
         "header" : " ",
         "field" : "empty",
         "filterable" : false,
         "sortable" : false,
-        "type" : null
+        "type" : "",
+        "filterType" : ""
     },
     {
         "header" : "Reference",
