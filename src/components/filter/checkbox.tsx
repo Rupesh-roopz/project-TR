@@ -1,10 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable no-mixed-spaces-and-tabs */
-import { Fragment, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 
 export function CheckboxFilter(props : any) {
 	const { column } = props;
 	const { filterValue = [], setFilter, preFilteredRows, id } = column;
+	
 	const options = useMemo(() => {
 		const options = new Set();
 		preFilteredRows.forEach((row: { values: { [x: string]: unknown; }; }) => {
@@ -13,7 +14,17 @@ export function CheckboxFilter(props : any) {
 		return [...options.values()];
 	  }, [id, preFilteredRows]);
 
+	  console.log(filterValue);
+	  useEffect(() => {
+		column.filterCheckbox ? null : (
+			setFilter(undefined),
+			setCheckedState(new Array(options.length).fill(false))
+		);
+	},[column.filterCheckbox,options]);
+
 	  function setFilteredParams(filterArr:any, val:any, i: number) {
+		  
+		column.filterCheckbox = true;
 		const updatedCheckedState = checkedState.map((item, index) =>
 			index === i ? !item : item
 		);
@@ -34,6 +45,10 @@ export function CheckboxFilter(props : any) {
 		new Array(options.length).fill(false)
 	);
 	
+	console.log(checkedState.map(i => {return i;}));
+	// setCheckedState([false, false, false]);
+	console.log(checkedState[1]);
+
 	return (
 	  <Fragment>
 			<div className="block">
@@ -49,7 +64,7 @@ export function CheckboxFilter(props : any) {
 									checked={checkedState[i]}
 									onChange={(e) => {
 										column.filterType === 'multiple' ? column.filter = 'multipleFilter' : null;
-					  					setFilter(setFilteredParams(filterValue, e.target.value, i));
+										column.filterCheckbox ? setFilter(setFilteredParams(filterValue, e.target.value, i)) : setFilter([]);
 									}}
 				  />
 				  <label htmlFor={option}>

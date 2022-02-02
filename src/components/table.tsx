@@ -18,8 +18,6 @@ import {ColumnsGenerate} from './columns';
 const TableComponent = (props : any) => {
 	const {columns, data} = props;
 
-	console.log(columns, data);
-	
 	const filterTypes = React.useMemo(
 		() => ({
 			greater: (rows:any, id:any, filterValue:any) => {
@@ -99,6 +97,8 @@ const TableComponent = (props : any) => {
 				return arr;
 			},
 			multipleFilter :(rows:any, filler:any, filterValue:any) => {
+				console.log(filler);
+				console.log(filterValue);
 				const arr: any[]= [];
 				rows.forEach((val: any) => {
 					if (filterValue.includes(val.original.pricingTier)) 
